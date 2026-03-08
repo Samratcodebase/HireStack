@@ -1,14 +1,17 @@
-import "dotenv/config";
-import express from "express";
+import ENV from "./src/utils/env.js";
+import ConnectDB from "./src/utils/db.js";
+import app from "./src/app.js";
+async function main() {
+  try {
+    await ConnectDB();
 
-const app = express();
+    app.listen(ENV.PORT, () => {
+      console.log(`Server is running at ${ENV.PORT}`);
+      console.log(` http://localhost:${ENV.PORT}`);
+    });
+  } catch (error) {
+    console.log(`Error Starting the Server : ${error}`);
+  }
+}
 
-app.get("/", (req, res) => {
-  res.status(200).json({
-    message: "Sucess from Api",
-  });
-});
-
-app.listen(process.env.PORT, () => {
-  console.log(`Server is running at ${process.env.PORT}`);
-});
+main();
